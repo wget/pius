@@ -100,9 +100,10 @@ class PiusMailer(object):
 
     return True
 
-  def _get_email_body(self, signer, keyid, email):
+  def _get_email_body(self, signer, keyid, email, filename):
     '''Helper function to grab the right email body.'''
-    interpolation_dict = {'keyid': keyid, 'signer': signer, 'email': email}
+    filename = os.path.basename(filename)
+    interpolation_dict = {'keyid': keyid, 'signer': signer, 'email': email, 'file': filename}
     if self.message_text:
       return open(self.message_text, 'r').read() % interpolation_dict
     else:
@@ -130,7 +131,7 @@ class PiusMailer(object):
     textpart.add_header('Content-Transfer-Encoding', 'quoted-printable')
     textpart.__delitem__('MIME-Version')
     textpart.set_payload(quopriMIME.encode(
-        self._get_email_body(signer, keyid, email)
+        self._get_email_body(signer, keyid, email, filename)
     ))
     encrypted_body.attach(textpart)
 
@@ -203,7 +204,7 @@ class PiusMailer(object):
     msg = MIMEMultipart.MIMEMultipart()
     msg.epilogue = ''
 
-    part = MIMEText.MIMEText(self._get_email_body(signer, keyid, email))
+    part = MIMEText.MIMEText(self._get_email_body(signer, keyid, email, filename))
     msg.attach(part)
 
     part = MIMEBase.MIMEBase('application', 'octet-stream')
