@@ -14,6 +14,7 @@ DEFAULT_TMP_DIR = '/tmp/pius_tmp'
 DEFAULT_OUT_DIR = '/tmp/pius_out'
 DEFAULT_MAIL_HOST = 'localhost'
 DEFAULT_MAIL_PORT = 587
+DEFAULT_MAIL_SUBJECT = "Your signed PGP key"
 PIUS_HOME = os.path.join(HOME, '.pius')
 PIUS_RC = os.path.join(PIUS_HOME, 'piusrc')
 

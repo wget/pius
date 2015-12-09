@@ -32,7 +32,7 @@ import sys
 def print_default_email(no_mime):
   '''Print the default email that is sent out.'''
   interpolation_dict = {'keyid': '<keyid>', 'signer': '<signer>',
-                        'email': '<email>'}
+                        'email': '<email>', 'file': '<file>'}
   print 'DEFAULT EMAIL TEXT:\n'
   if not no_mime:
     print DEFAULT_MIME_EMAIL_TEXT % interpolation_dict
@@ -152,6 +152,9 @@ def main():
                     help='Email the encrypted, signed keys to the'
                          ' respective email addresses. EMAIL is the address'
                          ' to send from. See also -H and -P.')
+  parser.add_option('--mail-subject', dest='mail_subject', metavar='SUBJECT',
+                    nargs=1, default=DEFAULT_MAIL_SUBJECT,
+                    help='Subject of the email. [default: %default].')
   parser.add_option('-M', '--mail-text', dest='mail_text', metavar='FILE',
                     nargs=1, type='not_another_opt',
                     help='Use the text in FILE as the body of email when'
@@ -248,6 +251,7 @@ def main():
         options.mail_tls,
         options.mail_no_pgp_mime,
         options.mail_override,
+        options.mail_subject,
         options.mail_text,
         options.tmp_dir
     )

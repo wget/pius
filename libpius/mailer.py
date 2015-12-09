@@ -14,7 +14,7 @@ import smtplib
 import socket
 
 class PiusMailer(object):
-  def __init__(self, mail, host, port, user, tls, no_mime, override, msg_text,
+  def __init__(self, mail, host, port, user, tls, no_mime, override, subject, msg_text,
                tmp_dir):
     self.mail = mail
     self.host = host
@@ -24,6 +24,7 @@ class PiusMailer(object):
     self.tls = tls
     self.no_pgp_mime = no_mime
     self.address_override = override
+    self.subject = subject
     self.message_text = msg_text
     self.tmp_dir = tmp_dir
 
@@ -31,6 +32,7 @@ class PiusMailer(object):
   def add_options(parser):
     parser.set_defaults(mail_host=DEFAULT_MAIL_HOST,
                         mail_port=DEFAULT_MAIL_PORT,
+                        mail_subject=DEFAULT_MAIL_SUBJECT,
                         mail_tls=True)
     parser.add_option('-u', '--mail-user', dest='mail_user', metavar='USER',
                       type='not_another_opt', nargs=1,
@@ -56,6 +58,8 @@ class PiusMailer(object):
                            ' sending out emails instead of the default text.'
                            ' To see the default text use'
                            ' --print-default-email. Requires -m.')
+    parser.add_option('--mail-subject', dest='mail_subject', metavar='SUBJECT',
+                      nargs=1, help='Subject of the email. [default: %default].')
     parser.add_option('-H', '--mail-host', dest='mail_host', metavar='HOSTNAME',
                       nargs=1, type='not_another_opt',
                       help='Hostname of SMTP server. [default: %default]')
@@ -230,7 +234,7 @@ class PiusMailer(object):
              ' likely due to the user having no encryption subkey.')
       raise MailSendError(msg)
 
-    msg['Subject'] = 'Your signed PGP key'
+    msg['Subject'] = self.subject
     self._send_mail(uid_data['email'], msg)
 
   def send_mail(self, to, subject, body):
