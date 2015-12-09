@@ -32,7 +32,7 @@ email addresses.
 Please take the attached message and decrypt it and then import it.
 Something like this should work:
 
-   gpg --import <file>
+   gpg --import %(file)s
 
 (In mutt ctrl-k will do this.)
 
@@ -59,7 +59,7 @@ email addresses.
 Please take the attached message and decrypt it and then import it.
 Something like this should work:
 
-   gpg -d <file> | gpg --import
+   gpg -d %(file)s | gpg --import
 
 Then, don't forget to send it to a keyserver:
 
